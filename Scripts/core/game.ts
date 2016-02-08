@@ -35,6 +35,7 @@ import Face3 = THREE.Face3;
 import Point = objects.Point;
 import Fog = THREE.Fog;
 import LensFlare = THREE.LensFlare;
+import AdditiveBlending = THREE.AdditiveBlending;
 
 //Custom Game Objects
 import gameObject = objects.gameObject;
@@ -73,6 +74,10 @@ var sphereLight: SphereGeometry;
 var sphereLightMaterial: MeshBasicMaterial;
 var sphereLightMesh: Mesh;
 var textureGrass: Texture;
+var textureFlare0: Texture;
+var textureFlare3: Texture;
+var flareColour: Color;
+var lensFlare: LensFlare;
 
 function init() {
     // Instantiate a new Scene object
@@ -133,14 +138,7 @@ function init() {
     target = new Object3D();
     target.position = new Vector3(5, 0, 0);
     
-    // Add a HemisphereLight
-    hemiLight = new HemisphereLight(0x0000ff, 0x00ff00, 0.6);
-    hemiLight.position.set(0, 500, 0);
-    hemiLight.visible = false;
-    scene.add(hemiLight);
-    console.log("Added Hemisphere Light to Scene");
-    
-    // Add a PointLight to the scene
+    // Add a Directional Light to the scene
     pointColour = "#ffffff";
     directionalLight = new DirectionalLight(pointColour);
     directionalLight.position.set(30, 10, -50);
@@ -160,9 +158,27 @@ function init() {
     scene.add(directionalLight);
     console.log("Added Directional Light to Scene");
     
+    // Setup Lens Flare
+    textureFlare0 = THREE.ImageUtils.loadTexture("Assets/textures/lensflare/lensflare0.png");
+    textureFlare3 = THREE.ImageUtils.loadTexture("Assets/textures/lensflare/lensflare3.png");
+    flareColour = new Color(0xffaacc);
+    lensFlare = new LensFlare(textureFlare0, 350, 0.0, AdditiveBlending, flareColour);
+    
+    lensFlare.add(textureFlare3, 60, 0.6, AdditiveBlending);
+    lensFlare.add(textureFlare3, 70, 0.7, AdditiveBlending);
+    lensFlare.add(textureFlare3, 120, 0.9, AdditiveBlending);
+    lensFlare.add(textureFlare3, 70, 1.0, AdditiveBlending);
+    
+    lensFlare.position.set(
+        directionalLight.position.x, 
+        directionalLight.position.y, 
+        directionalLight.position.z);
+    scene.add(lensFlare)
+    console.log("Added Lens Flare to Scene");
+    
     // add controls
     gui = new GUI();
-    control = new Control(0.03, 0.03, false, 0x00ff00, 0x0000ff, 0.6);
+    control = new Control(0.03, 0.03, ambientColour, pointColour, 0.1, 0, 30, 0.1, false, true, false, "Plane");
     addControl(control);
 
     // Add framerate stats
@@ -185,16 +201,12 @@ function onResize(): void {
 }
 
 function addControl(controlObject: Control): void {
-    gui.add(controlObject, 'hemisphere').onChange((flag) => {
-        hemiLight.visible = flag;
+    gui.addColor(controlObject, 'ambientColour').onChange((color) => {
+        ambientLight.color = new Color(color);
     });
 
-    gui.addColor(controlObject, 'groundColour').onChange((color) => {
-        hemiLight.groundColor = new Color(color);
-    });
-
-    gui.addColor(controlObject, 'skyColour').onChange((color) => {
-        hemiLight.color = new Color(color);
+    gui.addColor(controlObject, 'pointColour').onChange((color) => {
+        directionalLight.color = new Color(color);
     });
 
     gui.add(controlObject, 'intensity', 0, 5).onChange((intensity)=>{

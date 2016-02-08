@@ -6,19 +6,33 @@ module objects {
         //PUBLIC INSTANCE VARIABLES +++++++++++++++++++++++++++
         public rotationSpeed:number;
         public bouncingSpeed:number;
-        public hemisphere:boolean;
-        public groundColour:number;
-        public skyColour:number;
+        public ambientColour:string;
+        public pointColour:string;
         public intensity:number;
+        public distance:number;
+        public exponent:number;
+        public angle:number;
+        public debug:boolean;
+        public castShadow:boolean;
+        public onlyShadow:boolean;
+        public target:string;
         // CONSTRUCTOR ++++++++++++++++++++++++++++++++++++++++
-        constructor(rotationSpeed:number, bouncingSpeed:number, hemisphere:boolean,
-                    groundColour:number, skyColour:number, intensity:number) {
+        constructor(rotationSpeed:number, bouncingSpeed:number,
+            ambientColour:string, pointColour:string, intensity:number,
+            distance:number, exponent:number, angle:number, debug:boolean,
+            castShadow:boolean, onlyShadow:boolean, target:string) {
             this.rotationSpeed = rotationSpeed;
             this.bouncingSpeed = bouncingSpeed;
-            this.hemisphere = hemisphere;
-            this.groundColour = groundColour;
-            this.skyColour = skyColour;
+            this.ambientColour = ambientColour;
+            this.pointColour = pointColour;
             this.intensity = intensity;
+            this.distance = distance;
+            this.exponent = exponent;
+            this.angle = angle;
+            this.debug = debug;
+            this.castShadow = castShadow;
+            this.onlyShadow = onlyShadow;
+            this.target = target;
         }
     }
 }
