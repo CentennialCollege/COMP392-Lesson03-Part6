@@ -142,15 +142,15 @@ function init() {
     scene.add(directionalLight);
     console.log("Added Directional Light to Scene");
     // Setup Lens Flare
-    textureFlare0 = THREE.ImageUtils.loadTexture("Assets/textures/lensflare/lensflare0.png");
-    textureFlare3 = THREE.ImageUtils.loadTexture("Assets/textures/lensflare/lensflare3.png");
+    textureFlare0 = THREE.ImageUtils.loadTexture("Assets/lensflare/lensflare0.png");
+    textureFlare3 = THREE.ImageUtils.loadTexture("Assets/lensflare/lensflare3.png");
     flareColour = new Color(0xffaacc);
     lensFlare = new LensFlare(textureFlare0, 350, 0.0, AdditiveBlending, flareColour);
     lensFlare.add(textureFlare3, 60, 0.6, AdditiveBlending);
     lensFlare.add(textureFlare3, 70, 0.7, AdditiveBlending);
     lensFlare.add(textureFlare3, 120, 0.9, AdditiveBlending);
     lensFlare.add(textureFlare3, 70, 1.0, AdditiveBlending);
-    lensFlare.position.set(directionalLight.position.x, directionalLight.position.y, directionalLight.position.z);
+    lensFlare.position.set(30, 10, -50);
     scene.add(lensFlare);
     console.log("Added Lens Flare to Scene");
     // add controls
@@ -180,7 +180,7 @@ function addControl(controlObject) {
         directionalLight.color = new Color(color);
     });
     gui.add(controlObject, 'intensity', 0, 5).onChange(function (intensity) {
-        hemiLight.intensity = intensity;
+        directionalLight.intensity = intensity;
     });
 }
 // Add Stats Object to the Scene
